@@ -58,7 +58,7 @@ if (isset($_POST['submit'])) {
                                 <label for="txt_pass">Password:</label>
                                 <input type="password" class="form-control" id="txt_pass" name="txt_pass" required>
                             </div>
-                            <button type="submit" class="btn btn-primary" name="submit">Sign In</button>
+                            <button type="submit" class="btn btn-primary" name="submit">Log In</button>
                         </form>
                     </div>
                     <div class="card-footer">
