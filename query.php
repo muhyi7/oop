@@ -44,5 +44,22 @@ class crud extends koneksi
         return false;
     }
 }
+public function hapusData($id)
+{
+    try
+    {
+        $sql = "DELETE FROM user_detail WHERE id = :id";
+        $result = $this->koneksi->prepare($sql);
+        $result->bindParam(":id", $id);
+        $result->execute();
+        return true;
+    }
+    catch(PDOException $e)
+    {
+        echo $e->getMessage();
+        return false;
+    }
+}
+
 
 }
