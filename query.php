@@ -25,4 +25,24 @@ class crud extends koneksi
             return false;
         }
     }
+    public function editData($id, $email, $pass, $name)
+{
+    try
+    {
+        $sql = "UPDATE user_detail SET user_email = :email, user_password = :pass, user_fullname = :name WHERE id = :id";
+        $result = $this->koneksi->prepare($sql);
+        $result->bindParam(":id", $id);
+        $result->bindParam(":email", $email);
+        $result->bindParam(":pass", $pass);
+        $result->bindParam(":name", $name);
+        $result->execute();
+        return true;
+    }
+    catch(PDOException $e)
+    {
+        echo $e->getMessage();
+        return false;
+    }
+}
+
 }
