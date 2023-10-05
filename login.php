@@ -5,34 +5,41 @@ if (isset($_POST['submit'])) {
     $pass = $_POST['txt_pass'];
 
     if (!empty(trim($email)) && !empty(trim($pass))) {
+        $query = "SELECT * FROM user_detail WHERE user_email = ?";
+        $stmt = mysqli_prepare($koneksi, $query);
+        mysqli_stmt_bind_param($stmt, "s", $email);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
 
-        $query = "SELECT * FROM user_detail WHERE user_email = '$email'";
-        $result = mysqli_query($koneksi, $query);
-        $num = mysqli_num_rows($result);
-
-        while ($row = mysqli_fetch_array($result)) {
+        if ($row = mysqli_fetch_array($result)) {
             $userVal = $row['user_email'];
             $passVal = $row['user_password'];
             $userName = $row['user_fullname'];
-        }
+            $level = $row['level'];
 
-        if ($num != 0) {
             if ($userVal == $email && $passVal == $pass) {
-                header('Location: home.php?user_fullname=' . urlencode($userName));
+                if ($level == '1') {
+                    header('Location: home.php?user_fullname=' . urlencode($userName));
+                    exit;
+                } elseif ($level == '2') {
+                    header('Location: home_user.php?user_fullname=' . urlencode($userName));
+                    exit;
+                } else {
+                    $error = 'User atau password salah!!';
+                }
             } else {
                 $error = 'User atau password salah!!';
-                header('Location: login.php');
             }
         } else {
             $error = 'User tidak ditemukan!!';
-            header('Location: login.php');
         }
     } else {
         $error = 'Data tidak boleh kosong!!';
-        echo $error;
     }
 }
+
 ?>
+
 <!DOCTYPE html>
 <html>
 
@@ -49,6 +56,9 @@ if (isset($_POST['submit'])) {
                 <div class="card">
                     <div class="card-header bg-primary text-white">Login</div>
                     <div class="card-body">
+                        <?php if (isset($error)) : ?>
+                            <div class="alert alert-danger"><?php echo $error; ?></div>
+                        <?php endif; ?>
                         <form action="login.php" method="POST">
                             <div class="form-group">
                                 <label for="txt_email">Email:</label>
