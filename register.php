@@ -64,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </div>
     </div>
+    <p class="text-center mt-3"><a href="login.php">Sudah punya akun? Login di sini.</a></p>
 
     <!-- Tambahkan script Bootstrap di sini (JQuery, Popper.js, Bootstrap JS) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
