@@ -1,5 +1,7 @@
 <?php
 $koneksi = mysqli_connect("localhost", "root", "", "user");
+session_start();
+
 if (isset($_POST['submit'])) {
     $email = $_POST['txt_email'];
     $pass = $_POST['txt_pass'];
@@ -19,9 +21,11 @@ if (isset($_POST['submit'])) {
 
             if ($userVal == $email && $passVal == $pass) {
                 if ($level == '1') {
+                    $_SESSION['user_fullname'] = $userName; // Menyimpan info login dalam session
                     header('Location: home.php?user_fullname=' . urlencode($userName));
                     exit;
                 } elseif ($level == '2') {
+                    $_SESSION['user_fullname'] = $userName; // Menyimpan info login dalam session
                     header('Location: home_user.php?user_fullname=' . urlencode($userName));
                     exit;
                 } else {
@@ -36,6 +40,12 @@ if (isset($_POST['submit'])) {
     } else {
         $error = 'Data tidak boleh kosong!!';
     }
+}
+
+// Check if "Ingat Saya" checkbox is checked and set a cookie
+if (isset($_POST['ingat_saya']) && $_POST['ingat_saya'] == 1 && isset($_SESSION['user_fullname'])) {
+    setcookie('user_fullname', $_SESSION['user_fullname'], time() + 3600 * 24 * 30, '/');
+    setcookie('user_level', $level, time() + 3600 * 24 * 30, '/'); // Set cookie for user level
 }
 
 ?>
@@ -67,6 +77,10 @@ if (isset($_POST['submit'])) {
                             <div class="form-group">
                                 <label for="txt_pass">Password:</label>
                                 <input type="password" class="form-control" id="txt_pass" name="txt_pass" required>
+                            </div>
+                            <div class="form-group form-check">
+                                <input type="checkbox" class="form-check-input" name="ingat_saya" value="1">
+                                <label class="form-check-label" for="ingat_saya">Ingat Saya</label>
                             </div>
                             <button type="submit" class="btn btn-primary" name="submit">Log In</button>
                         </form>
